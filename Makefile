@@ -1,6 +1,6 @@
 ###########################################################################
 #                             Mike's Makefile                              
-#                  Copyright (C) 2022-  Michael Jeuga
+#                  Copyright (C) 2022 - Michael Jeuga
 #
 ###########################################################################
 
@@ -11,6 +11,7 @@ gopher:
 	@touch main.go
 	@touch Dockerfile
 	@touch docker-compose.yml
+	@go get github.com/google/uuid
 	@go get github.com/adamluzsi/testcase
 	@go get github.com/gorilla/mux
 	@go mod init github.com/mikejeuga/$(repo)

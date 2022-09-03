@@ -1,7 +1,9 @@
 package models
 
-type Player struct {
-	ID ID
-}
+import (
+	"github.com/google/uuid"
+)
 
-type ID string
+type Player struct {
+	ID uuid.UUID
+}
