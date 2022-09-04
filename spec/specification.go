@@ -21,7 +21,7 @@ func NewRegisterPlayerSpec(club Club) *RegisterPlayerSpec {
 	return &RegisterPlayerSpec{Club: club}
 }
 
-func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
+func (spec RegisterPlayerSpec) AddPlayer(t *testing.T) {
 	s := testcase.NewSpec(t)
 	ctx := context.Background()
 
