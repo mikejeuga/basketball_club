@@ -37,6 +37,7 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 				return &player
 			},
 		}
+
 		s.When("the club wants to register the player,", func(s *testcase.Spec) {
 			act := func(t *testcase.T) (uuid.UUID, error) {
 				return spec.Club.Register(ctx, *player1.Get(t))
@@ -57,6 +58,33 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 				})
 			})
 
+		})
+
+	})
+
+	s.Describe("Unhappy Path", func(s *testcase.Spec) {
+		player2 := testcase.Var[*models.Player]{
+			ID: "First Player",
+			Init: func(t *testcase.T) *models.Player {
+				player := models.NewPlayer("Kevin", "Durant", models.Birthday{
+					Day:   30,
+					Month: 10,
+					Year:  2010,
+				})
+				return &player
+			},
+		}
+		s.When("the club wants to register the player,", func(s *testcase.Spec) {
+			s.And("the player is not old enough to be part of the team", func(s *testcase.Spec) {
+				act := func(t *testcase.T) (uuid.UUID, error) {
+					return spec.Club.Register(ctx, *player2.Get(t))
+				}
+				s.Then("the player cannot be part of the team", func(t *testcase.T) {
+					_, err := act(t)
+					t.Must.NotNil(err)
+					t.Must.Equal(models.PlayerAgeError, err)
+				})
+			})
 		})
 
 	})

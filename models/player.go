@@ -1,8 +1,11 @@
 package models
 
 import (
+	"errors"
 	"github.com/google/uuid"
 )
+
+var PlayerAgeError = errors.New("this player is too young to be part of the club")
 
 type Birthday struct {
 	Day, Month, Year int

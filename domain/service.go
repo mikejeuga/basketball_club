@@ -2,37 +2,47 @@ package domain
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/mikejeuga/basketball_club/models"
+	"github.com/mikejeuga/basketball_club/spec"
+	"time"
 )
 
-type Roster map[uuid.UUID]models.Player
-
-type Club struct {
-	Players Roster
+type Service struct {
+	Club spec.Club
 }
 
-func (c *Club) Register(ctx context.Context, player models.Player) (uuid.UUID, error) {
-	newUUID, err := uuid.NewUUID()
-	if err != nil {
-		return [16]byte{}, err
+func NewService(club spec.Club) *Service {
+	return &Service{Club: club}
+}
+
+func (s *Service) Register(ctx context.Context, player models.Player) (uuid.UUID, error) {
+	if !isOldEnough(player, parseDate(time.Now())) {
+		return [16]byte{}, models.PlayerAgeError
 	}
-	player.ID = newUUID
-	c.Players[player.ID] = player
-	return player.ID, nil
+	return s.Club.Register(ctx, player)
 }
 
-func (c *Club) FindPlayerBy(ctx context.Context, ID uuid.UUID) (models.Player, error) {
-	player, found := c.Players[ID]
-	if !found {
-		return models.Player{}, fmt.Errorf("no player registered with this ID: %v", ID)
+func (s *Service) FindPlayerBy(ctx context.Context, ID uuid.UUID) (models.Player, error) {
+	return s.Club.FindPlayerBy(ctx, ID)
+}
+
+func isOldEnough(player models.Player, today models.Birthday) bool {
+	if today.Year-player.Dob.Year > 16 {
+		return true
 	}
 
-	return player, nil
+	if (today.Year-player.Dob.Year >= 16) && (today.Month >= player.Dob.Month) && (today.Day >= player.Dob.Day) {
+		return true
+	}
+	return false
 }
 
-func NewClub() *Club {
-	roster := make(Roster)
-	return &Club{Players: roster}
+func parseDate(date time.Time) models.Birthday {
+	b := models.Birthday{}
+	b.Day = date.Day()
+	b.Month = int(date.Month())
+	b.Year = date.Year()
+
+	return b
 }
