@@ -25,7 +25,7 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 	s := testcase.NewSpec(t)
 	ctx := context.Background()
 
-	s.Describe("Given a player", func(s *testcase.Spec) {
+	s.Describe("Player Registration", func(s *testcase.Spec) {
 		player1 := testcase.Var[*models.Player]{
 			ID: "First Player",
 			Init: func(t *testcase.T) *models.Player {
@@ -36,11 +36,11 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 				})
 			},
 		}
-		s.When("the club wants to register the player", func(s *testcase.Spec) {
+		s.When("the club wants to register the player,", func(s *testcase.Spec) {
 			act := func(t *testcase.T) (uuid.UUID, error) {
 				return spec.Club.Register(ctx, *player1.Get(t))
 			}
-			s.Then("The registration goes smoothly", func(t *testcase.T) {
+			s.Then("the registration goes smoothly.", func(t *testcase.T) {
 				id, err := act(t)
 				t.Must.NoError(err)
 
@@ -50,7 +50,9 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 					}
 					returnedPlayer, err := act(t)
 					t.Must.NoError(err)
-					t.Must.Equal(player1.Get(t).ID, returnedPlayer.ID)
+					t.Must.Equal(player1.Get(t).FirstName, returnedPlayer.FirstName)
+					t.Must.Equal(player1.Get(t).LastName, returnedPlayer.LastName)
+					t.Must.Equal(player1.Get(t).Dob, returnedPlayer.Dob)
 				})
 			})
 
