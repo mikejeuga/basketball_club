@@ -18,6 +18,6 @@ type Player struct {
 	Dob                 Birthday
 }
 
-func NewPlayer(firstName string, lastName string, dob Birthday) *Player {
-	return &Player{FirstName: firstName, LastName: lastName, Dob: dob}
+func NewPlayer(firstName string, lastName string, dob Birthday) Player {
+	return Player{FirstName: firstName, LastName: lastName, Dob: dob}
 }

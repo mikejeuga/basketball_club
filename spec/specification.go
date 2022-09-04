@@ -29,11 +29,12 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 		player1 := testcase.Var[*models.Player]{
 			ID: "First Player",
 			Init: func(t *testcase.T) *models.Player {
-				return models.NewPlayer("Michael", "Jordan", models.Birthday{
+				player := models.NewPlayer("Michael", "Jordan", models.Birthday{
 					Day:   30,
 					Month: 10,
 					Year:  1991,
 				})
+				return &player
 			},
 		}
 		s.When("the club wants to register the player,", func(s *testcase.Spec) {
