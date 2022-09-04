@@ -25,7 +25,7 @@ func (spec RegisterPlayerSpec) Add_Player(t *testing.T) {
 	s := testcase.NewSpec(t)
 	ctx := context.Background()
 
-	s.Describe("Player Registration", func(s *testcase.Spec) {
+	s.Describe("Happy Path", func(s *testcase.Spec) {
 		player1 := testcase.Var[*models.Player]{
 			ID: "First Player",
 			Init: func(t *testcase.T) *models.Player {
